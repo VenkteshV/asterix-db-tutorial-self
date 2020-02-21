@@ -1,0 +1,17 @@
+use  dataverse TinySocial;
+
+for $user in dataset FacebookUsers
+where $user.id = 8
+return $user;
+
+
+use dataverse channels;
+for $report in dataset EmergencyReports
+for $location in dataset UserLocations
+where $report.emergencyType = "earthquake"
+let $circle := create-circle($location.location,.1)
+where spatial-intersect($report.impactZone, $circle)
+return {
+	"user at":$location.location,
+	"report at":$report.impactZone
+}
